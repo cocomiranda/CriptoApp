@@ -125,20 +125,12 @@ const Crypto = () => {
             var price_str = price.toFixed(11);
             price = price_str; 
         }
-        // console.log(pair)
-        // console.log(exchange)
-        // console.log(price)
-        // console.log('')
         lista_exchange.push(exchange);
         lista_precio.push('$ ' + price);
         // console.log(lista_exchange)
         // console.log(lista_precio)
       }
     }
-    arreglo['exchange'] = lista_exchange
-    arreglo['price'] = lista_precio
-    console.log(arreglo.exchange) 
-    console.log(arreglo.price)
     
 
 
