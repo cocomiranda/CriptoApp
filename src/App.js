@@ -1,7 +1,8 @@
-import './App.css';
-import Crypto from './components/Crypto';
-import { Component } from 'react';
-
+import "./App.css";
+import Crypto from "./components/Crypto";
+import { Component } from "react";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { Exchanges } from "./components/Exchanges";
 
 // class Header extends Component {
 //   render() {
@@ -11,15 +12,13 @@ import { Component } from 'react';
 //   }
 // }
 
-class App extends Component {
-  render() {
-    return (
-      <div className="App">
-        {/* <Header title={'hola'} num={5}/> */}
-        <Crypto />
-      </div>
-    );
-  }
-}
+const App = () => {
+  return (
+    <Routes>
+      <Route path="/" element={<Crypto />} />
+      <Route path=":name" element={<Exchanges />} />
+    </Routes>
+  );
+};
 
 export default App;
