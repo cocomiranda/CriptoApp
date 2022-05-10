@@ -1,7 +1,6 @@
 import "./App.css";
 import Crypto from "./components/Crypto";
-import { Component } from "react";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import { Exchanges } from "./components/Exchanges";
 
 // class Header extends Component {
@@ -16,7 +15,7 @@ const App = () => {
   return (
     <Routes>
       <Route path="/" element={<Crypto />} />
-      <Route path=":name" element={<Exchanges />} />
+      <Route path="/:name/:symbol" element={<Exchanges />} />
     </Routes>
   );
 };

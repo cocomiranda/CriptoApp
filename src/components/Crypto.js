@@ -8,7 +8,7 @@ const constante = {
 
 const Crypto = () => {
   const [cryptos, setCryptos] = useState([]);
-  const [markets, setMarkets] = useState([]);
+  // const [markets, setMarkets] = useState([]);
   const [switchToggled, setSwitchToggled] = useState(false);
 
   const navigate = useNavigate();
@@ -18,7 +18,7 @@ const Crypto = () => {
   };
 
   const endpoint =
-    "https://api.coinstats.app/public/v1/coins?skip=0&limit=10&currency=USD";
+    "https://api.coinstats.app/public/v1/coins?skip=0&limit=100&currency=USD";
   const showData = () => {
     axios
       .get(endpoint)
@@ -106,95 +106,23 @@ const Crypto = () => {
     );
     setCryptos([...sortedCryptos]);
   };
-  const market = async (cripto, tick) => {
-    const url = "https://api.coinstats.app/public/v1/markets?coinId=" + cripto;
-    // console.log(cripto);
-    const ticker = tick + "/USDT";
-    const response = await fetch(url);
-    const data = await response.json();
-    // console.log({ data });
-    // const info = Object.values(data);
-    const lista_exchange = [];
-    const lista_precio = [];
-    const arreglo = [];
-    for (var i = 0; i < 10; i++) {
-      var info = Object.values(data[i]);
-      // console.log(info)
-      if (info.length == 5) {
-        var price = info[0];
-        var exchange = info[1];
-        var pair = info[2];
-      } else if (info.length == 6) {
-        var price = info[0];
-        var exchange = info[2];
-        var pair = info[3];
-      }
-      if (
-        pair == ticker &&
-        (exchange == "Binance" ||
-          exchange == "Coinbase" ||
-          exchange == "Kraken" ||
-          exchange == "Kucoin" ||
-          exchange == "Bitfinex" ||
-          exchange == "Gate.io" ||
-          exchange == "HuobiPro" ||
-          exchange == "Crypto.com" ||
-          exchange == "OKEX" ||
-          exchange == "Bybit" ||
-          exchange == "BitMart" ||
-          exchange == "CoinEx" ||
-          exchange == "Poloniex" ||
-          exchange == "FTXUs" ||
-          exchange == "Bittrex" ||
-          exchange == "Bitso" ||
-          exchange == "Liquid" ||
-          exchange == "Coinsbit" ||
-          exchange == "Huobi" ||
-          exchange == "Bitstamp")
-      ) {
-        if (price >= 1000) {
-          price = parseInt(price);
-        }
-        if (price >= 100 && price < 1000) {
-          price = parseFloat(price);
-          price = price.toFixed(3);
-          price = parseFloat(price);
-        }
-        if (price >= 2 && price < 100) {
-          price = parseFloat(price);
-          price = price.toFixed(3);
-          price = parseFloat(price);
-        }
-        if (price >= 0.001 && price < 2) {
-          price = parseFloat(price);
-          price = price.toFixed(4);
-          price = parseFloat(price);
-        }
-        if (price <= 0.001) {
-          var price_str = price.toString();
-          price_str = price_str.substring(0, 10);
-          price = parseFloat(price_str);
-        }
-        if (price <= 0.000001) {
-          var price_str = price.toFixed(11);
-          price = price_str;
-        }
-        lista_exchange.push(exchange);
-        lista_precio.push("$ " + price);
-        // console.log(lista_exchange)
-        // console.log(lista_precio)
-      }
-    }
-  };
+  
 
-  const seeExchanges = (crypto) => {
-    navigate(`/${crypto}`);
+  const seeExchanges = (crypto, tick) => {
+    // console.log(crypto, tick)
+    navigate(`/${crypto}/${tick}`);
   };
 
   return (
     <>
       {/* <input value={search} onChange={searcher} type='text' placeholder='Search...' className='form-control' /> */}
-      <div className="mt-2 mb-3">
+      <div className="mt-2 mb-3" style={{
+          display: "flex",
+          justifyContent: "right",
+          alignItems: "right",
+          marginTop: "2%",
+          marginRight: "1%"
+        }}>
         <img
           src="http://livecodestream.dev/post/a-better-approach-to-dark-mode-on-your-website/featured.jpg"
           alt="dark mode"
@@ -210,7 +138,7 @@ const Crypto = () => {
         }
       >
         <thead>
-          <tr>
+          <tr  style={{ textAlign:"center" }}>
             <th onClick={() => sort("rank")}>#</th>
             <th onClick={() => sort("symbol")}>Name</th>
             <th onClick={() => sort("price")}>Price</th>
@@ -219,13 +147,13 @@ const Crypto = () => {
             <th onClick={() => sort("priceChange1w")}>% 1w</th>
           </tr>
         </thead>
-        <tbody>
+        <tbody  style={{ textAlign:"center" }}>
           {nuevo.coins.map((result) => (
             <tr key={result.id}>
               <td>{result.rank}</td>
               <td
                 /* onClick={() => market(result.id, result.symbol.toUpperCase())} */
-                onClick={() => seeExchanges(result.id)}
+                onClick={() => seeExchanges(result.id, result.symbol)}
               >
                 <img src={result.icon} height="20px" alt="Coin icon" />{" "}
                 {result.symbol.toUpperCase()}
