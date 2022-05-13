@@ -6,29 +6,26 @@ const constante = {
   dir: "desc",
 };
 
+
 export const Exchanges = () => {
   const [exchanges, setExchanges] = useState([]);
   const [markets, setMarkets] = useState([]);
   const params = useParams();
-  // console.log(params);
-
   
+  console.log(params)
+
+  if (params.tema == 'light') {
+    var theme = true;
+  }
+  if (params.tema == 'dark') {
+    var theme = false;
+  }
+  const [switchToggled, setSwitchToggled] = useState(theme);
+
 
   var arreglo = []
-  var lista_exchange = [];
-  var lista_precio = [];
-  var lista_num = [];
   var j = 0;
 
-  var [switchToggled, setSwitchToggled] = useState(false);
-  const ToggleSwitch = () => {
-    switchToggled ? setSwitchToggled(false) : setSwitchToggled(true);
-  };
-
-  // const sort = (property) => {
-  //   const sortedMarkets = markets.sort((a, b) => a[property] - b[property]);
-  //   setMarkets([...sortedMarkets]);
-  // };
 
 
   const sort = (elem) => {
@@ -68,30 +65,49 @@ export const Exchanges = () => {
   };
 
 
-
+  
   useEffect(() => {
     
     (async () => {
-      
+      let aux = '';
       // const url =
       //   "https://api.coinstats.app/public/v1/markets?coinId=" + params.name;
       // const response = await fetch(url);
       // const data = await response.json();
       // console.log({ exchanges: data });
-      const url = "https://api.coinstats.app/public/v1/markets?coinId=" + params.name;
+      let url = "https://api.coinstats.app/public/v1/markets?coinId=" + params.name;
       // console.log(url);
-      const response = await fetch(url);
-      const data = await response.json();
+      let response = await fetch(url);
+      let data = await response.json();
       // console.log({ data });
-      const info = Object.values(data);
+      let info = Object.values(data);
       // console.log(info)
+      
+
+      if (info == '') {
+        // console.log('ERROR')
+        url = "https://api.coinstats.app/public/v1/markets?coinId=" + params.symbol.toLocaleLowerCase();
+        // console.log(url)
+        response = await fetch(url);
+        data = await response.json();
+        // console.log({ data });
+        info = Object.values(data);
+        aux = info;
+        // console.log(info)
+      }
       const ticker = params.symbol + "/USDT";
+      const ticker2 = params.symbol + "/USD";
       // console.log(ticker)
+      // console.log(ticker2)
       
+      // console.log(aux);
+      if (aux == '') {
+        aux = info;
+      }
+      // console.log(aux);
+
       
-      // console.log(info.length)
-      
-      for (var i = 0; i < info.length; i++) {
+      for (var i = 0; i < aux.length; i++) {
           var market = Object.values(data[i]);
           // console.log(market)
           if (market.length == 5) {
@@ -107,7 +123,7 @@ export const Exchanges = () => {
           // console.log(exchange)
           // console.log(price)
 
-          if (pair == ticker &&
+          if ((pair == ticker || pair == ticker2) &&
             (exchange == "Binance" ||
               exchange == "Coinbase" ||
               exchange == "Kraken" ||
@@ -122,14 +138,19 @@ export const Exchanges = () => {
               exchange == "CoinEx" ||
               exchange == "Poloniex" ||
               exchange == "FTXUs" ||
+              exchange == "FTX" ||
               exchange == "Bittrex" ||
               exchange == "Bitso" ||
               exchange == "Liquid" ||
               exchange == "Coinsbit" ||
               exchange == "Huobi" ||
-              exchange == "Bitstamp")
+              exchange == "Bitstamp" ||
+              exchange == "Hotbit" ||
+              exchange == "Bitrue" ||
+              exchange == "LBank")
               ) 
             {
+              // console.log(exchange)
               if (price >= 1000) {
                 price = parseInt(price);
               }
@@ -161,7 +182,7 @@ export const Exchanges = () => {
               if (exchange == 'Binance') {
                 link = 'https://www.binance.com/en/trade/' + params.symbol + '_USDT';
               }
-              if (exchange == 'FTXUs') {
+              if (exchange == 'FTXUs' || exchange == "FTX" ) {
                 link = 'https://ftx.us/trade/' + params.symbol + '/USD';
               }
               if (exchange == 'Coinbase') {
@@ -215,6 +236,16 @@ export const Exchanges = () => {
               if (exchange == 'HuobiPro') {
                 link = 'https://www.huobi.com/en-us/exchange/' + params.symbol.toLowerCase() + '_usdt/';
               }
+              if (exchange == 'Hotbit') {
+                link = 'https://www.hotbit.io/exchange?symbol=' + params.symbol + '_USDT';
+              }
+              if (exchange == 'Bitrue') {
+                link = 'https://www.bitrue.com/trade/klima_usdt' + params.symbol.toLowerCase() + '_usdt';
+              }
+              if (exchange == 'LBank') {
+                link = 'https://www.lbank.info/exchange/' + params.symbol.toLowerCase() + '/usdt';
+              }
+              
               
               j += 1;
               arreglo.push({
@@ -230,23 +261,16 @@ export const Exchanges = () => {
       // setMarkets({ num: lista_num, exchanges: lista_exchange, precios: lista_precio });
     })();
   }, []);
-  // console.log(markets)
+
   const nav = useNavigate();
+
   return (
     <>
       <table className="table">
         <tbody>
           <tr>
-            <th className="mb-2">
-              <button variant="primary" onClick={() => nav("/")}>BACK</button>
-            </th>
-            <th className="mt-2 mb-3" style={ {textAlign : "right"}}>
-                  <img
-                    src="http://livecodestream.dev/post/a-better-approach-to-dark-mode-on-your-website/featured.jpg"
-                    alt="dark mode"
-                    height="20px"
-                    onClick={ToggleSwitch}
-                  />
+            <th>
+              <button onClick={() => nav("/")}>BACK</button>
             </th>
           </tr>
         </tbody>
@@ -270,7 +294,7 @@ export const Exchanges = () => {
           <tbody>
             {markets.map((result) => (
               <tr key={result.num}  style={{ textAlign:"center" }}>
-                  <td> <a target="_blank" href={result.links} style={{textDecoration: 'none'}}>{result.exchanges}</a></td>
+                  <td> <a href={result.links} style={{textDecoration: 'none'}} target="_blank">{result.exchanges}</a></td>
                   <td>$ {result.precios}</td>
               </tr>
             ))}

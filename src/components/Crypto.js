@@ -1,24 +1,68 @@
 import axios from "axios";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef  } from "react";
 import { useNavigate } from "react-router-dom";
 
 const constante = {
   dir: "desc",
 };
 
+let tema = 'dark';
+
+// console.log(tema);
+
 const Crypto = () => {
   const [cryptos, setCryptos] = useState([]);
-  // const [markets, setMarkets] = useState([]);
-  const [switchToggled, setSwitchToggled] = useState(false);
+  // const [theme, setTheme] = useState(localStorage.getItem('theme'));
+  let [switchToggled, setSwitchToggled] = useState(tema);
+
+  // dark = true
+  // light = false
+
+  const ref = useRef(null);
 
   const navigate = useNavigate();
 
-  const ToggleSwitch = () => {
+ 
+  // console.log(tema);
+
+
+  let ToggleSwitch = () => {
     switchToggled ? setSwitchToggled(false) : setSwitchToggled(true);
+    if (switchToggled) {
+      tema = 'light';
+      localStorage.setItem('theme', 'dark')
+      const span = ref.current
+      span.className = 'table table-light table-hover mt-2'
+      // console.log(span.className);
+      // console.log(tema)
+    }
+    else if ( ! switchToggled) {
+      tema = 'dark';
+      localStorage.setItem('theme', 'light')
+      const span = ref.current
+      span.className = 'table table-dark table-hover mt-2'
+      // console.log(span.className);
+      // console.log(tema)
+    }
   };
 
+  // console.log(tema)
+  if (tema == 'light') {
+    // console.log('LIGHT')
+    switchToggled = false;
+    // console.log(switchToggled)
+  }
+  else if (tema == 'dark') {
+    // console.log('DARK')
+    switchToggled = true;
+    // ToggleSwitch();
+    // console.log(switchToggled)
+  }
+
+
+
   const endpoint =
-    "https://api.coinstats.app/public/v1/coins?skip=0&limit=100&currency=USD";
+    "https://api.coinstats.app/public/v1/coins?skip=0&limit=500&currency=USD";
   const showData = () => {
     axios
       .get(endpoint)
@@ -38,7 +82,7 @@ const Crypto = () => {
     (name) =>
       name.symbol != "CRUNI" &&
       name.symbol != "YCRUVE-USDN" &&
-      name.symbol != "A3CRV" &&
+      name.symbol != "a3Crv" &&
       name.symbol != "LUSD3CRV-F" &&
       name.symbol != "B-60WETH-40DAI" &&
       name.symbol != "BCHA" &&
@@ -67,9 +111,21 @@ const Crypto = () => {
       name.symbol != "crETH" &&
       name.symbol != "staBAL3" &&
       name.symbol != "apFEI-TRIBE" &&
-      name.symbol != "CVXCRV"
+      name.symbol != "CVXCRV" &&
+      name.symbol != "BLUNA" &&
+      name.symbol != "BURST" &&
+      name.symbol != "CRUNI" &&
+      name.symbol != "YVUSDC" &&
+      name.symbol != "MIMATIC" &&
+      name.symbol != "fDAI-6"
   );
-  // nuevo.coins = cryptos.filter(name => (name.symbol != 'BTC'));
+  nuevo.tema = tema
+  // setTheme(nuevo.tema)
+  // console.log(nuevo.tema)
+  // console.log('\n')
+  // console.log(nuevo.coins)
+
+  
 
   const sort = (elem) => {
     if (constante.dir == "asc") {
@@ -108,33 +164,40 @@ const Crypto = () => {
   };
   
 
-  const seeExchanges = (crypto, tick) => {
+  const seeExchanges = (crypto, tick, tema) => {
     // console.log(crypto, tick)
-    navigate(`/${crypto}/${tick}`);
+    navigate(`/${crypto}/${tick}/${tema}`);
   };
 
   return (
-    <>
+    <><div>
       {/* <input value={search} onChange={searcher} type='text' placeholder='Search...' className='form-control' /> */}
-      <div className="mt-2 mb-3" style={{
-          display: "flex",
-          justifyContent: "right",
-          alignItems: "right",
-          marginTop: "2%",
-          marginRight: "1%"
-        }}>
-        <img
-          src="http://livecodestream.dev/post/a-better-approach-to-dark-mode-on-your-website/featured.jpg"
-          alt="dark mode"
-          height="20px"
-          onClick={ToggleSwitch}
-        />
-      </div>
-      <table
+      <table className="table">
+        <tbody>
+          <tr>
+            <th>
+              <tr style={{ fontSize: 30}}>ValorCriptoBot</tr>
+              <tr style={{ fontStyle: 'italic', fontSize: 15}}>Follow us on {' '}
+                  <a href='https://twitter.com/ValorCriptoBot' style={{textDecoration: 'none'}} target="_blank">
+                    Twitter</a>
+              </tr>
+            </th>
+            <th className="mt-2 mb-3" style={{ textAlign : "right", marginTop: "10%" }}>
+                  <img
+                    src="http://livecodestream.dev/post/a-better-approach-to-dark-mode-on-your-website/featured.jpg"
+                    alt="dark mode"
+                    height="20px"
+                    onClick={ToggleSwitch}
+                  />
+            </th>
+          </tr>
+        </tbody>
+      </table>
+      <table ref={ ref }
         className={
           switchToggled
-            ? "table table-ligth table-hover mt-2"
-            : "table table-dark table-hover mt-2"
+            ? "table table-dark table-hover mt-2"
+            : "table table-light table-hover mt-2"
         }
       >
         <thead>
@@ -153,7 +216,7 @@ const Crypto = () => {
               <td>{result.rank}</td>
               <td
                 /* onClick={() => market(result.id, result.symbol.toUpperCase())} */
-                onClick={() => seeExchanges(result.id, result.symbol)}
+                onClick={() => seeExchanges(result.id, result.symbol, nuevo.tema)}
               >
                 <img src={result.icon} height="20px" alt="Coin icon" />{" "}
                 {result.symbol.toUpperCase()}
@@ -206,6 +269,7 @@ const Crypto = () => {
           ))}
         </tbody>
       </table>
+      </div>
     </>
   );
 };
