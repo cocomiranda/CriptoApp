@@ -12,8 +12,10 @@ let tema = 'dark';
 
 const Crypto = () => {
   const [cryptos, setCryptos] = useState([]);
+  const [ search, setSearch ] = useState("") 
   // const [theme, setTheme] = useState(localStorage.getItem('theme'));
   let [switchToggled, setSwitchToggled] = useState(tema);
+  let [switchImage, setSwitchImage] = useState([]);
 
   // dark = true
   // light = false
@@ -22,7 +24,8 @@ const Crypto = () => {
 
   const navigate = useNavigate();
 
- 
+  let star = "https://images.vexels.com/media/users/3/136916/isolated/lists/aa21eb60437133bf4f4be189636a187a-star-favorite-outline-icon.png"
+  // let outline = 
   // console.log(tema);
 
 
@@ -45,6 +48,31 @@ const Crypto = () => {
       // console.log(tema)
     }
   };
+
+
+  let ToggleImage = () => {
+    console.log('hosdasds')
+    switchImage ? setSwitchImage(false) : setSwitchImage(true);
+    
+    // if (switchToggled) {
+    //   tema = 'light';
+    //   localStorage.setItem('theme', 'dark')
+    //   const span = ref.current
+    //   span.className = 'table table-light table-hover mt-2'
+    //   // console.log(span.className);
+    //   // console.log(tema)
+    // }
+    // else if ( ! switchToggled) {
+    //   tema = 'dark';
+    //   localStorage.setItem('theme', 'light')
+    //   const span = ref.current
+    //   span.className = 'table table-dark table-hover mt-2'
+    //   // console.log(span.className);
+    //   // console.log(tema)
+    // }
+  };
+
+
 
   // console.log(tema)
   if (tema == 'light') {
@@ -115,9 +143,16 @@ const Crypto = () => {
       name.symbol != "BLUNA" &&
       name.symbol != "BURST" &&
       name.symbol != "CRUNI" &&
-      name.symbol != "YVUSDC" &&
+      name.symbol != "yvUSDC" &&
       name.symbol != "MIMATIC" &&
-      name.symbol != "fDAI-6"
+      name.symbol != "fDAI-6" &&
+      name.symbol != "B-50USDC-50WETH" &&
+      name.symbol != "LUSD3CRV-f" &&
+      name.symbol != "f6-USDC" &&
+      name.symbol != "SIGNA" &&
+      name.symbol != "B-80BAL-20WETH" &&
+      name.symbol != "crUNI" &&
+      name.symbol != "FLEXUSD"
   );
   nuevo.tema = tema
   // setTheme(nuevo.tema)
@@ -125,6 +160,10 @@ const Crypto = () => {
   // console.log('\n')
   // console.log(nuevo.coins)
 
+  const searcher = (e) => {
+    setSearch(e.target.value)
+  }
+  const results = !search ? nuevo.coins : nuevo.coins.filter( (val)=> val.name.toLowerCase().includes(search) )
   
 
   const sort = (elem) => {
@@ -171,7 +210,7 @@ const Crypto = () => {
 
   return (
     <><div>
-      {/* <input value={search} onChange={searcher} type='text' placeholder='Search...' className='form-control' /> */}
+      
       <table className="table">
         <tbody>
           <tr>
@@ -193,6 +232,8 @@ const Crypto = () => {
           </tr>
         </tbody>
       </table>
+    
+      <input value={search} onChange={searcher} type='text' placeholder='Search...' className='form-control'/>
       <table ref={ ref }
         className={
           switchToggled
@@ -202,6 +243,7 @@ const Crypto = () => {
       >
         <thead>
           <tr  style={{ textAlign:"center" }}>
+            {/* <th>FAV</th> */}
             <th onClick={() => sort("rank")}>#</th>
             <th onClick={() => sort("symbol")}>Name</th>
             <th onClick={() => sort("price")}>Price</th>
@@ -211,8 +253,19 @@ const Crypto = () => {
           </tr>
         </thead>
         <tbody  style={{ textAlign:"center" }}>
-          {nuevo.coins.map((result) => (
+          {results.map((result) => (
             <tr key={result.id}>
+              {/* <td>
+                  <img
+                    src={
+                      switchImage
+                        ? "https://images.vexels.com/media/users/3/136916/isolated/lists/aa21eb60437133bf4f4be189636a187a-star-favorite-outline-icon.png"
+                        : "https://images.vexels.com/media/users/3/134121/isolated/lists/5ff73adb05d7f1fe47dd49bb1b08affa-star-cartoon-icon-50.png"
+                    }
+                    height="18px"
+                    onClick={ToggleImage}
+                  />
+              </td> */}
               <td>{result.rank}</td>
               <td
                 /* onClick={() => market(result.id, result.symbol.toUpperCase())} */

@@ -12,7 +12,7 @@ export const Exchanges = () => {
   const [markets, setMarkets] = useState([]);
   const params = useParams();
   
-  console.log(params)
+  // console.log(params)
 
   if (params.tema == 'light') {
     var theme = true;
