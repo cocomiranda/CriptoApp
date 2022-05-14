@@ -24,7 +24,7 @@ const Crypto = () => {
 
   const navigate = useNavigate();
 
-  let star = "https://images.vexels.com/media/users/3/136916/isolated/lists/aa21eb60437133bf4f4be189636a187a-star-favorite-outline-icon.png"
+  // let star = "https://images.vexels.com/media/users/3/136916/isolated/lists/aa21eb60437133bf4f4be189636a187a-star-favorite-outline-icon.png"
   // let outline = 
   // console.log(tema);
 
@@ -51,7 +51,6 @@ const Crypto = () => {
 
 
   let ToggleImage = () => {
-    console.log('hosdasds')
     switchImage ? setSwitchImage(false) : setSwitchImage(true);
     
     // if (switchToggled) {
@@ -161,10 +160,11 @@ const Crypto = () => {
   // console.log(nuevo.coins)
 
   const searcher = (e) => {
-    setSearch(e.target.value)
+    setSearch(e.target.value.toUpperCase())
   }
-  const results = !search ? nuevo.coins : nuevo.coins.filter( (val)=> val.name.toLowerCase().includes(search) )
+  const results = !search ? nuevo.coins : nuevo.coins.filter( (val)=> (val.symbol.toUpperCase().includes(search)) )
   
+  // console.log(results)
 
   const sort = (elem) => {
     if (constante.dir == "asc") {
@@ -203,9 +203,9 @@ const Crypto = () => {
   };
   
 
-  const seeExchanges = (crypto, tick, tema) => {
-    // console.log(crypto, tick)
-    navigate(`/${crypto}/${tick}/${tema}`);
+  const seeExchanges = (crypto, tick, tema, cap, vol) => {
+    // console.log(crypto, tick, tema, cap, vol)
+    navigate(`/${crypto}/${tick}/${tema}/${cap}/${vol}`);
   };
 
   return (
@@ -269,7 +269,7 @@ const Crypto = () => {
               <td>{result.rank}</td>
               <td
                 /* onClick={() => market(result.id, result.symbol.toUpperCase())} */
-                onClick={() => seeExchanges(result.id, result.symbol, nuevo.tema)}
+                onClick={() => seeExchanges(result.id, result.symbol, nuevo.tema, result.marketCap, result.volume)}
               >
                 <img src={result.icon} height="20px" alt="Coin icon" />{" "}
                 {result.symbol.toUpperCase()}

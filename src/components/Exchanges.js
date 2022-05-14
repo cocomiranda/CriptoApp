@@ -14,6 +14,10 @@ export const Exchanges = () => {
   
   // console.log(params)
 
+  
+  let cap = parseInt(params.marketCap).toLocaleString();
+  let vol = parseInt(params.volume).toLocaleString()
+
   if (params.tema == 'light') {
     var theme = true;
   }
@@ -83,22 +87,22 @@ export const Exchanges = () => {
       let info = Object.values(data);
       // console.log(info)
       
+      // let url2 = "https://api.coinstats.app/public/v1/coins/" + params.name + "?currency=USD";
+      // let response2 = await fetch(url2);
+      // let data2 = await response2.json();
+      // let info2 = Object.values(data2);
+      // let logo = info2[0].icon;
+
 
       if (info == '') {
         // console.log('ERROR')
         url = "https://api.coinstats.app/public/v1/markets?coinId=" + params.symbol.toLocaleLowerCase();
-        // console.log(url)
         response = await fetch(url);
         data = await response.json();
-        // console.log({ data });
         info = Object.values(data);
         aux = info;
-        // console.log(info)
       }
       const ticker = params.symbol + "/USDT";
-      const ticker2 = params.symbol + "/USD";
-      // console.log(ticker)
-      // console.log(ticker2)
       
       // console.log(aux);
       if (aux == '') {
@@ -123,7 +127,7 @@ export const Exchanges = () => {
           // console.log(exchange)
           // console.log(price)
 
-          if ((pair == ticker || pair == ticker2) &&
+          if ((pair == ticker) &&
             (exchange == "Binance" ||
               exchange == "Coinbase" ||
               exchange == "Kraken" ||
@@ -284,7 +288,13 @@ export const Exchanges = () => {
             ? "table table-ligth table-hover mt-2"
             : "table table-dark table-hover mt-2"}>
           <thead>
-          
+          <tr>
+            <th style={{ textAlign:"left" }}>Market Cap: <span>$ {cap}</span>
+            </th>
+            <th style={{ textAlign:"right" }}>Volume (24h): <span>$ {vol}</span>
+            </th>
+          </tr>
+          <br></br>
           <tr style={{ textAlign:"center" }}>
             <th onClick={() => sort("exchanges")}>EXCHANGE
             </th>

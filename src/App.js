@@ -15,7 +15,7 @@ const App = () => {
   return (
     <Routes>
       <Route path="/" element={<Crypto />} />
-      <Route path="/:name/:symbol/:tema" element={<Exchanges />} />
+      <Route path="/:name/:symbol/:tema/:marketCap/:volume" element={<Exchanges />} />
     </Routes>
   );
 };
