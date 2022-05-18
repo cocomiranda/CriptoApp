@@ -8,7 +8,7 @@ const constante = {
 
 let tema = 'dark';
 
-// console.log(tema);
+
 
 const Crypto = () => {
   const [cryptos, setCryptos] = useState([]);
@@ -25,6 +25,7 @@ const Crypto = () => {
   const navigate = useNavigate();
 
   // let star = "https://images.vexels.com/media/users/3/136916/isolated/lists/aa21eb60437133bf4f4be189636a187a-star-favorite-outline-icon.png"
+  // 
   // let outline = 
   // console.log(tema);
 
@@ -52,23 +53,7 @@ const Crypto = () => {
 
   let ToggleImage = () => {
     switchImage ? setSwitchImage(false) : setSwitchImage(true);
-    
-    // if (switchToggled) {
-    //   tema = 'light';
-    //   localStorage.setItem('theme', 'dark')
-    //   const span = ref.current
-    //   span.className = 'table table-light table-hover mt-2'
-    //   // console.log(span.className);
-    //   // console.log(tema)
-    // }
-    // else if ( ! switchToggled) {
-    //   tema = 'dark';
-    //   localStorage.setItem('theme', 'light')
-    //   const span = ref.current
-    //   span.className = 'table table-dark table-hover mt-2'
-    //   // console.log(span.className);
-    //   // console.log(tema)
-    // }
+
   };
 
 
@@ -104,6 +89,7 @@ const Crypto = () => {
     showData();
   }, []);
 
+  
   const nuevo = [];
   nuevo.coins = cryptos.filter(
     (name) =>
@@ -203,9 +189,12 @@ const Crypto = () => {
   };
   
 
-  const seeExchanges = (crypto, tick, tema, cap, vol) => {
+  const seeExchanges = (crypto, tick, tema, cap, vol, icon) => {
     // console.log(crypto, tick, tema, cap, vol)
-    navigate(`/${crypto}/${tick}/${tema}/${cap}/${vol}`);
+    // console.log(icon);
+    const icono = icon.slice(35,-4);
+    // console.log(icono)
+    navigate(`/${crypto}/${tick}/${tema}/${cap}/${vol}/${icono}`);
   };
 
   return (
@@ -214,7 +203,10 @@ const Crypto = () => {
       <table className="table">
         <tbody>
           <tr>
-            <th>
+            <th style={{ width: 50}}>
+              <img src="/logo512.png" height="65px"></img>
+            </th>
+            <th style={{ alignItems: 'left', justifyContent: 'left', textAlign:"left" }}>
               <tr style={{ fontSize: 30}}>ValorCriptoBot</tr>
               <tr style={{ fontStyle: 'italic', fontSize: 15}}>Follow us on {' '}
                   <a href='https://twitter.com/ValorCriptoBot' style={{textDecoration: 'none'}} target="_blank">
@@ -269,9 +261,9 @@ const Crypto = () => {
               <td>{result.rank}</td>
               <td
                 /* onClick={() => market(result.id, result.symbol.toUpperCase())} */
-                onClick={() => seeExchanges(result.id, result.symbol, nuevo.tema, result.marketCap, result.volume)}
+                onClick={() => seeExchanges(result.id, result.symbol, nuevo.tema, result.marketCap, result.volume, result.icon)}
               >
-                <img src={result.icon} height="20px" alt="Coin icon" />{" "}
+                <img src={result.icon} height="20px"/>&nbsp;
                 {result.symbol.toUpperCase()}
               </td>
               <td>
