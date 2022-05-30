@@ -1,6 +1,7 @@
 import axios from "axios";
 import React, { useState, useEffect, useRef  } from "react";
 import { useNavigate } from "react-router-dom";
+import "@fontsource/do-hyeon"; 
 
 const constante = {
   dir: "desc",
@@ -13,7 +14,6 @@ let tema = 'dark';
 const Crypto = () => {
   const [cryptos, setCryptos] = useState([]);
   const [ search, setSearch ] = useState("") 
-  // const [theme, setTheme] = useState(localStorage.getItem('theme'));
   let [switchToggled, setSwitchToggled] = useState(tema);
   let [switchImage, setSwitchImage] = useState([]);
 
@@ -24,10 +24,6 @@ const Crypto = () => {
 
   const navigate = useNavigate();
 
-  // let star = "https://images.vexels.com/media/users/3/136916/isolated/lists/aa21eb60437133bf4f4be189636a187a-star-favorite-outline-icon.png"
-  // 
-  // let outline = 
-  // console.log(tema);
 
 
   let ToggleSwitch = () => {
@@ -37,16 +33,14 @@ const Crypto = () => {
       localStorage.setItem('theme', 'dark')
       const span = ref.current
       span.className = 'table table-light table-hover mt-2'
-      // console.log(span.className);
-      // console.log(tema)
+
     }
     else if ( ! switchToggled) {
       tema = 'dark';
       localStorage.setItem('theme', 'light')
       const span = ref.current
       span.className = 'table table-dark table-hover mt-2'
-      // console.log(span.className);
-      // console.log(tema)
+
     }
   };
 
@@ -58,23 +52,18 @@ const Crypto = () => {
 
 
 
-  // console.log(tema)
   if (tema == 'light') {
-    // console.log('LIGHT')
     switchToggled = false;
-    // console.log(switchToggled)
   }
   else if (tema == 'dark') {
-    // console.log('DARK')
     switchToggled = true;
-    // ToggleSwitch();
-    // console.log(switchToggled)
+
   }
 
 
 
   const endpoint =
-    "https://api.coinstats.app/public/v1/coins?skip=0&limit=500&currency=USD";
+    "https://api.coinstats.app/public/v1/coins?skip=0&limit=100&currency=USD";
   const showData = () => {
     axios
       .get(endpoint)
@@ -140,17 +129,13 @@ const Crypto = () => {
       name.symbol != "FLEXUSD"
   );
   nuevo.tema = tema
-  // setTheme(nuevo.tema)
-  // console.log(nuevo.tema)
-  // console.log('\n')
-  // console.log(nuevo.coins)
+
 
   const searcher = (e) => {
     setSearch(e.target.value.toUpperCase())
   }
   const results = !search ? nuevo.coins : nuevo.coins.filter( (val)=> (val.symbol.toUpperCase().includes(search)) )
   
-  // console.log(results)
 
   const sort = (elem) => {
     if (constante.dir == "asc") {
@@ -190,10 +175,7 @@ const Crypto = () => {
   
 
   const seeExchanges = (crypto, tick, tema, cap, vol, icon) => {
-    // console.log(crypto, tick, tema, cap, vol)
-    // console.log(icon);
     const icono = icon.slice(35,-4);
-    // console.log(icono)
     navigate(`/${crypto}/${tick}/${tema}/${cap}/${vol}/${icono}`);
   };
 
@@ -204,11 +186,11 @@ const Crypto = () => {
         <tbody>
           <tr>
             <th style={{ width: 50}}>
-              <img src="/logo512.png" height="65px"></img>
+              <img src="/web.png" height="70px"></img>
             </th>
             <th style={{ alignItems: 'left', justifyContent: 'left', textAlign:"left" }}>
-              <tr style={{ fontSize: 30}}>ValorCriptoBot</tr>
-              <tr style={{ fontStyle: 'italic', fontSize: 15}}>Follow us on {' '}
+              <tr style={{ fontSize: 35, fontFamily: "Do Hyeon", fontWeight: 200}}>criptoprecio</tr>
+              <tr style={{ fontStyle: 'italic', fontSize: 12}}>Follow us on {' '}
                   <a href='https://twitter.com/ValorCriptoBot' style={{textDecoration: 'none'}} target="_blank">
                     Twitter</a>
               </tr>
@@ -235,7 +217,6 @@ const Crypto = () => {
       >
         <thead>
           <tr  style={{ textAlign:"center" }}>
-            {/* <th>FAV</th> */}
             <th onClick={() => sort("rank")}>#</th>
             <th onClick={() => sort("symbol")}>Name</th>
             <th onClick={() => sort("price")}>Price</th>
@@ -247,20 +228,8 @@ const Crypto = () => {
         <tbody  style={{ textAlign:"center" }}>
           {results.map((result) => (
             <tr key={result.id}>
-              {/* <td>
-                  <img
-                    src={
-                      switchImage
-                        ? "https://images.vexels.com/media/users/3/136916/isolated/lists/aa21eb60437133bf4f4be189636a187a-star-favorite-outline-icon.png"
-                        : "https://images.vexels.com/media/users/3/134121/isolated/lists/5ff73adb05d7f1fe47dd49bb1b08affa-star-cartoon-icon-50.png"
-                    }
-                    height="18px"
-                    onClick={ToggleImage}
-                  />
-              </td> */}
               <td>{result.rank}</td>
               <td
-                /* onClick={() => market(result.id, result.symbol.toUpperCase())} */
                 onClick={() => seeExchanges(result.id, result.symbol, nuevo.tema, result.marketCap, result.volume, result.icon)}
               >
                 <img src={result.icon} height="20px"/>&nbsp;

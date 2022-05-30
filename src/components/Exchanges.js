@@ -7,17 +7,13 @@ const constante = {
   dir: "desc",
 };
 
-// console.log(tema);
 var os = navigator.userAgent;
-// console.log(os)
 
 if (os.includes('iPhone')) {
   var sistema = 'ios';
-  // console.log(sistema)
 }
 else if (os.includes('Android')) {
   var sistema = 'android';
-  // console.log(sistema)
 }
 else if(navigator.userAgent.indexOf("Chrome") > -1 ||
   navigator.userAgent.indexOf("Safari") > -1 ||
@@ -25,24 +21,7 @@ else if(navigator.userAgent.indexOf("Chrome") > -1 ||
   navigator.userAgent.indexOf("Firefox") > -1 ||
   navigator.userAgent.indexOf("MSIE") > -1) {
     var sistema = 'web'
-    // console.log(sistema);
 }
-// console.log(window.navigator.appCodeName);
-// console.log(window.navigator.appName);
-// console.log(window.navigator.appVersion);
-// console.log(window.navigator.platform);
-// if (os.includes('Windows')) {
-//   var sistema = 'windows';
-//   console.log(sistema)
-// }
-// if (os.includes('iPhone')) {
-//   var sistema = 'ios';
-//   console.log(sistema)
-// }
-// if (os.includes('Android')) {
-//   var sistema = 'android';
-//   console.log(sistema)
-// }
 
 
 export const Exchanges = () => {
@@ -56,14 +35,7 @@ export const Exchanges = () => {
 
   const params = useParams();
   
-  // console.log(params)
 
-
-  
-
-
-  // console.log(font)
-  
   let cap = parseInt(params.marketCap).toLocaleString();
   let vol = parseInt(params.volume).toLocaleString()
 
@@ -131,18 +103,18 @@ export const Exchanges = () => {
       let aux = '';
 
 
-      
-      // if (params.name == 'binance-coin') {
-      //   setBnb("https://api.coingecko.com/api/v3/coins/binancecoin")
-      // }
-      // else {
-      //   setBnb("https://api.coingecko.com/api/v3/coins/" + params.name)
-      // }
-      // let url2 = "https://api.coingecko.com/api/v3/coins/" + params.name;
-      // console.log(url2)
-
       if (params.name == 'binance-coin') {
         let url2 = "https://api.coingecko.com/api/v3/coins/binancecoin";
+        let response2 = await fetch(url2);
+        let data2 = await response2.json();
+        let large = data2.image.large
+        let inicio = large.indexOf("images");
+        let fin = large.indexOf("/large")
+        let nuevo = parseInt(large.slice(inicio + 7, fin));
+        setId(nuevo);
+      }
+      else if (params.name == 'helium_hnt') {
+        let url2 = "https://api.coingecko.com/api/v3/coins/helium";
         let response2 = await fetch(url2);
         let data2 = await response2.json();
         let large = data2.image.large
@@ -162,44 +134,23 @@ export const Exchanges = () => {
         setId(nuevo);
       }
 
-      // let response2 = await fetch(url2);
-      // let data2 = await response2.json();
-      // let large = data2.image.large
-      // let inicio = large.indexOf("images");
-      // let fin = large.indexOf("/large")
-      // let nuevo = parseInt(large.slice(inicio + 7, fin));
-      // console.log(nuevo)
-      // setId(nuevo);
-
-
-      // let url3 = "https://api.coinstats.app/public/v1/coins/" + params.name;
-      // // console.log(url3)
-      // let response3 = await fetch(url3);
-      // let data3 = await response3.json();
-      // let info3 = Object.values(data3);
-      // let img = info3[0].icon;
-      // // console.log(img)
-      // setImagen(img);
+    
       let img = 'https://static.coinstats.app/coins/' + params.icono + '.png'
       setImagen(img);
-      // console.log(imagen)
 
 
 
 
 
       let url = "https://api.coinstats.app/public/v1/markets?coinId=" + params.name;
-      // console.log(url);
       let response = await fetch(url);
       let data = await response.json();
-      // console.log({ data });
       let info = Object.values(data);
-      // console.log(info)
       
       
     
       if (info == '') {
-        // console.log('ERROR')
+        console.log('ERROR')
         url = "https://api.coinstats.app/public/v1/markets?coinId=" + params.symbol.toLocaleLowerCase();
         response = await fetch(url);
         data = await response.json();
@@ -208,16 +159,13 @@ export const Exchanges = () => {
       }
       const ticker = params.symbol + "/USDT";
       
-      // console.log(aux);
       if (aux == '') {
         aux = info;
       }
-      // console.log(aux);
 
       
       for (var i = 0; i < aux.length; i++) {
           var market = Object.values(data[i]);
-          // console.log(market)
           if (market.length == 5) {
               var price = market[0];
               var exchange = market[1];
@@ -227,9 +175,6 @@ export const Exchanges = () => {
               var exchange = market[2];
               var pair = market[3];
           }
-          // console.log(pair)
-          // console.log(exchange)
-          // console.log(price)
 
           if ((pair == ticker) &&
             (exchange == "Binance" ||
@@ -260,7 +205,6 @@ export const Exchanges = () => {
               exchange == "UniswapV3")
               ) 
             {
-              // console.log(exchange)
               if (price >= 1000) {
                 price = parseInt(price);
               }
@@ -560,7 +504,6 @@ export const Exchanges = () => {
 
 
               
-              // console.log(link)
               
               if (params.tema == 'light') {
                 color = '#000000'
@@ -570,7 +513,6 @@ export const Exchanges = () => {
               }
 
 
-              // console.log(color)
 
               j += 1;
               arreglo.push({
@@ -580,19 +522,14 @@ export const Exchanges = () => {
                 links: link,
                 color: color
               });
-              // console.log(arreglo)
             }
       }
       setMarkets(arreglo)
-      // setMarkets({ num: lista_num, exchanges: lista_exchange, precios: lista_precio });
     })();
   }, []);
 
   const nav = useNavigate();
-  // const panel = "/es/monedas/" + params.name + "?chart=7_days#panel";
   let src = "https://www.coingecko.com/coins/" + id + "/sparkline";
-  // console.log(src)
-  // console.log(markets)
 
   return (
     <>
